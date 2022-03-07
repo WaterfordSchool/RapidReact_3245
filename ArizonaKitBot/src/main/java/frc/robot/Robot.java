@@ -11,9 +11,11 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.motorcontrol.Talon;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -30,9 +32,9 @@ public class Robot extends TimedRobot {
   //CANSparkMax r3 = new CANSparkMax(RobotMap.R3CANID, MotorType.kBrushless);
 //comment
 
-  TalonSRX indexer = new TalonSRX(0);
-  CANSparkMax shooter = new CANSparkMax(5, MotorType.kBrushless);
-  TalonSRX shootIntake = new TalonSRX(6);
+  TalonSRX indexer = new TalonSRX(RobotMap.INDEXID);
+  CANSparkMax shooter = new CANSparkMax(RobotMap.SHOOTID, MotorType.kBrushless);
+  TalonSRX shootIntake = new TalonSRX(RobotMap.SHOOTINTAKEID);
 
   MotorControllerGroup l = new MotorControllerGroup(l1, l2);
   MotorControllerGroup r = new MotorControllerGroup(r1, r2);
@@ -42,8 +44,11 @@ public class Robot extends TimedRobot {
   XboxController driver = new XboxController(0);
   XboxController operator = new XboxController(1);
 
+  Talon intake = new Talon(RobotMap.INTAKEPORT);
+
   boolean toggleOn = false;
   boolean toggleButtonPressed = false;
+  Timer timer = new Timer();
 
   private boolean llVT;
   private double llDrive;
@@ -59,7 +64,10 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {}
 
   @Override
-  public void autonomousInit() {}
+  public void autonomousInit() {
+    timer.start();
+    timer.reset();
+  }
 
   @Override
   public void autonomousPeriodic() {}
@@ -70,11 +78,9 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     shootIntake();
-    //updateToggle();
-    //toggleShoot();
+    
     shoot();
-    //laurenToggle();
-    //laurenUpdateToggle();
+    intake();
     indexer();
     speedButtons();
   }
@@ -91,7 +97,17 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {}
 
+public void intake(){
+  if(driver.getRawButton(RobotMap.INTAKEBUTTONFOR)){
+    intake.set(0.7);
+  }
+  if(driver.getRawButton(RobotMap.INTAKEBUTTONBAC)){
+    intake.set(-0.7);
+  }
+  if (!driver.getRawButton(1)&&!driver.getRawButton(2))
+ {intake.set(0.0);}
   
+}
   public void shootIntake(){
     if(operator.getRawButton(1)){
       shootIntake.set(ControlMode.PercentOutput, -0.5);

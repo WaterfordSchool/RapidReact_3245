@@ -27,8 +27,8 @@ public class RobotMap {
     public static final int SHOOTERBUTTON = 3;
     public static final int DEPLOYINTAKEAXIS = 3;
     public static final int RETRACTINTAKEAXIS = 4;
-    public static final int INTAKEBUTTON = 4;
-
+    public static final int INTAKEBUTTONFOR = 5;
+    public static final int INTAKEBUTTONBAC = 6;
     //driver controls 
     public static final int DRIVERINDEXERSORTINGBUTTON = 2;
     
@@ -41,7 +41,8 @@ public class RobotMap {
     public static final int SOLFORONBUTTON = 2;
     
     //shooter motor controller IDs
-    public static final int INDEXID = 8;
+    public static final int INDEXID = 0;
     public static final int SHOOTID = 5;
-    public static final int INTAKEID = 10;
+    public static final int SHOOTINTAKEID = 6;
+    public static final int INTAKEPORT = 4;
 }
