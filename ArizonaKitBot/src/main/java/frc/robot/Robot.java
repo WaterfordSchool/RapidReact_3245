@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -43,6 +44,10 @@ public class Robot extends TimedRobot {
 
   boolean toggleOn = false;
   boolean toggleButtonPressed = false;
+
+  private boolean llVT;
+  private double llDrive;
+  private double llSteer;
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -182,4 +187,29 @@ public class Robot extends TimedRobot {
   }
  }
   } 
+
+  public void updateLimeLight(){
+    final double STEER= 0.1;      //how hard to turn
+    final double DRIVE= 0.25;     //how hard to drive forward
+    final double TARGET_AREA = 10;//percentage of screen that the target covers
+    final double MAX_DRIVE = 0.7; //fastest the robot can go
+
+    double dv = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0);
+    double dx = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
+    double dy = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
+    double da = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0);
+
+    //if there isnt a target, gives up
+    if(dv<1.0){
+      llVT = false;
+      llDrive = 0;
+      llSteer = 0;
+      return;
+    }
+    //there is a target, find amout to turn and move
+    llVT = true;
+    llSteer = dx*STEER;
+    llDrive = (TARGET_AREA- da)*DRIVE;
+    llDrive = llDrive>MAX_DRIVE?MAX_DRIVE:llDrive;
+  }
 }
