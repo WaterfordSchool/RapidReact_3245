@@ -9,7 +9,12 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
@@ -24,41 +29,68 @@ import edu.wpi.first.wpilibj.motorcontrol.Talon;
  * project.
  */
 public class Robot extends TimedRobot {
+  //drive motors, 4
   CANSparkMax l1 = new CANSparkMax(RobotMap.L1CANID, MotorType.kBrushless);
   CANSparkMax l2 = new CANSparkMax(RobotMap.L2CANID, MotorType.kBrushless);
   //CANSparkMax l3 = new CANSparkMax(RobotMap.L3CANID, MotorType.kBrushless);
   CANSparkMax r1 = new CANSparkMax(RobotMap.R1CANID, MotorType.kBrushless);
   CANSparkMax r2 = new CANSparkMax(RobotMap.R2CANID, MotorType.kBrushless);
   //CANSparkMax r3 = new CANSparkMax(RobotMap.R3CANID, MotorType.kBrushless);
-//comment
 
+  //shoot motors
   TalonSRX indexer = new TalonSRX(RobotMap.INDEXID);
   CANSparkMax shooter = new CANSparkMax(RobotMap.SHOOTID, MotorType.kBrushless);
   TalonSRX shootIntake = new TalonSRX(RobotMap.SHOOTINTAKEID);
-
+  //drive
   MotorControllerGroup l = new MotorControllerGroup(l1, l2);
   MotorControllerGroup r = new MotorControllerGroup(r1, r2);
 
   DifferentialDrive drive = new DifferentialDrive(l,r);
 
+  //controllers
   XboxController driver = new XboxController(0);
   XboxController operator = new XboxController(1);
 
+  //intake motors
   Talon intake = new Talon(RobotMap.INTAKEPORT);
+  Talon deployRetract = new Talon(RobotMap.DRINTAKEPORT);
 
+  //climb motors
+  TalonSRX climbA = new TalonSRX(RobotMap.CLIMBAID);
+  TalonSRX climbB = new TalonSRX(RobotMap.CLIMBBID);
+
+  //gross toggling things
   boolean toggleOn = false;
   boolean toggleButtonPressed = false;
+
+  //Auto
   Timer timer = new Timer();
 
+  //limelight
   private boolean llVT;
   private double llDrive;
   private double llSteer;
+
+  //gyro
+  ADXRS450_Gyro gyro = new ADXRS450_Gyro();
+  double i = 0;
+  double d = 0;
+  double p = Math.pow(0.5, 9);
+  PIDController PID = new PIDController(p, i, d);
+
+  //pneumatics
+  DoubleSolenoid sol = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, RobotMap.SOLCHANNEL1, RobotMap.SOLCHANNEL2);
+  Compressor compressor = new Compressor(PneumaticsModuleType.CTREPCM);
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
   @Override
-  public void robotInit() {}
+  public void robotInit() {
+    gyro.calibrate();
+    gyro.reset();
+    
+  }
 
   @Override
   public void robotPeriodic() {}
@@ -70,7 +102,24 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    if(timer.get()<RobotMap.AUTOTIME1){
+      drive.arcadeDrive(RobotMap.AUTODRIVESPEED1, RobotMap.AUTODRIVETURN1);
+    }
+    if(timer.get()<RobotMap.AUTOTIME2 && timer.get()>RobotMap.AUTOTIME1){
+
+    }
+    if(timer.get()<RobotMap.AUTOTIME3 && timer.get()>RobotMap.AUTOTIME2){
+
+    }
+    if(timer.get()>RobotMap.AUTOTIME3){
+
+    }
+    if(timer.get()>RobotMap.AUTOTIME3 + RobotMap.AUTOTIME3DURATION){
+      
+    }
+    
+  }
 
   @Override
   public void teleopInit() {}
@@ -78,11 +127,12 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     shootIntake();
-    
     shoot();
     intake();
     indexer();
     speedButtons();
+    deployRetractIntake();
+    deployClimber();
   }
 
   @Override
@@ -108,6 +158,9 @@ public void intake(){
  {intake.set(0.0);}
   
 }
+  public void deployRetractIntake(){
+    deployRetract.set(operator.getRawAxis(5)*0.4);
+  }
   public void shootIntake(){
     if(operator.getRawButton(1)){
       shootIntake.set(ControlMode.PercentOutput, -0.5);
@@ -156,18 +209,7 @@ public void intake(){
     }
   }
 
-  public void laurenToggle(){
-    toggleButtonPressed = operator.getRawButton(3);
-    toggleOn = toggleButtonPressed;
-  }
-  public void laurenUpdateToggle(){
-    if(toggleOn){
-      shooter.set(0.65);
-    }
-    if(toggleOn == false){
-      shooter.set(0);
-    }
-  }
+  
   public void allThree(){
     if(operator.getRawButton(4)){
       shootIntake.set(ControlMode.PercentOutput, -0.5);    
@@ -191,7 +233,13 @@ public void intake(){
   }
  }
 
- //fast bu
+ //fast button for xbox controller
+ else if(driver.getRawButton(1)){
+   drive.arcadeDrive(-driver.getRawAxis(0), -driver.getRawAxis(3));
+   if(driver.getRawAxis(2)>0){
+     drive.arcadeDrive(-driver.getRawAxis(0), driver.getRawAxis(2));
+   }
+ }
  
  
 
@@ -203,6 +251,32 @@ public void intake(){
   }
  }
   } 
+  public void deployClimber(){
+    if(timer.get()>=120){
+      if(operator.getRawButton(RobotMap.CLIMBERBUTTON));
+      //change magnitude once test
+      climbA.set(ControlMode.PercentOutput, 0.4);
+      climbB.set(ControlMode.PercentOutput, 0.4);
+    }
+      if(!operator.getRawButton(RobotMap.CLIMBERBUTTON)){
+        climbA.set(ControlMode.PercentOutput, 0);
+        climbB.set(ControlMode.PercentOutput, 0);
+      }
+  }
+  
+  public void turnTo(double targetAngle, double targetSpeed){
+    //angle = 0-2^16
+    PID.setSetpoint(targetAngle);
+    PID.setTolerance(3, 0.1);
+    double turn = PID.calculate(gyro.getAngle());
+    if(PID.getPositionError()>3){
+
+      //maybe supposed to be tank drive??
+      drive.arcadeDrive(turn, -turn);
+    }else{
+      drive.arcadeDrive(targetSpeed, turn);
+    }
+  }
 
   public void updateLimeLight(){
     final double STEER= 0.1;      //how hard to turn
