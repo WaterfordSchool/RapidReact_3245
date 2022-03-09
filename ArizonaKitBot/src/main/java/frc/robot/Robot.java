@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.motorcontrol.Talon;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -36,6 +37,9 @@ public class Robot extends TimedRobot {
   CANSparkMax r1 = new CANSparkMax(RobotMap.R1CANID, MotorType.kBrushless);
   CANSparkMax r2 = new CANSparkMax(RobotMap.R2CANID, MotorType.kBrushless);
   //CANSparkMax r3 = new CANSparkMax(RobotMap.R3CANID, MotorType.kBrushless);
+
+  //leds
+  Spark led = new Spark(RobotMap.BLINKINPORT);
 
   //shoot motors
   TalonSRX indexer = new TalonSRX(RobotMap.INDEXID);
@@ -81,6 +85,8 @@ public class Robot extends TimedRobot {
   //pneumatics
   DoubleSolenoid sol = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, RobotMap.SOLCHANNEL1, RobotMap.SOLCHANNEL2);
   Compressor compressor = new Compressor(PneumaticsModuleType.CTREPCM);
+
+  
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -275,6 +281,24 @@ public void intake(){
       drive.arcadeDrive(turn, -turn);
     }else{
       drive.arcadeDrive(targetSpeed, turn);
+    }
+  }
+  public void leds(){
+    if(driver.getPOV() == 0){
+      //up red
+      led.set(0.61);
+    }
+    if(driver.getPOV() == 180){
+      //down blue
+      led.set(0.87);
+    }
+    if(driver.getPOV() == 90){
+      //right "twinkles ocean palette"
+      led.set(-0.51);
+    }
+    if(driver.getPOV() == 270){
+      //left "twinkles lava palette"
+      led.set(-0.49);
     }
   }
 

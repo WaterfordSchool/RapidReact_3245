@@ -47,6 +47,9 @@ public class RobotMap {
     public static final int INTAKEPORT = 4;
     public static final int DRINTAKEPORT = 5;
 
+    //leds (NOT finalized)
+    public static final int BLINKINPORT = 10;
+
     //climb motor ids (NOT finalized, not tested yet)
     public static final int CLIMBAID = 99;
     public static final int CLIMBBID = 100;
