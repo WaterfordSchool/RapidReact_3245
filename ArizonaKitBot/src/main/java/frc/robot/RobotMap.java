@@ -6,7 +6,6 @@ public class RobotMap {
     public static final int R2CANID = 2;
     public static final int L1CANID = 3;
     public static final int L2CANID = 4;
-    
 
    
     //pwm ports
