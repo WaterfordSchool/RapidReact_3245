@@ -60,6 +60,10 @@ public class RobotMap {
     public static final int DRINTAKEPORT = 5;
 
     
+<<<<<<< HEAD
+=======
+
+>>>>>>> aa15ec98e4264fbab895c90cd6720fbc97ac134e
     //climb motor ids (NOT finalized, not tested yet)
     public static final int CLIMBAID = 99;
     public static final int CLIMBBID = 100;
