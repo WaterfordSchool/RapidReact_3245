@@ -6,19 +6,26 @@ public class RobotMap {
     public static final int R2CANID = 2;
     public static final int L1CANID = 3;
     public static final int L2CANID = 4;
-    
 
-   
     //pwm ports
     public static final int BLINKINPORT = 1;
 
     //auto; change names once designate function
-    public static final double AUTOTIME1 = 1.0;
-    public static final double AUTOTIME2 = 1.0;
-    public static final double AUTOTIME3 = 1.0;
-    public static final double AUTOTIME3DURATION = 1.0;
-    public static final double AUTODRIVESPEED1 = .5;
-    public static final double AUTODRIVETURN1 = 0.0;
+    public static final double AUTODEPLOYINTAKE = 2.0;
+    public static final double AUTOSPINUPSHOOT1 = RobotMap.AUTODEPLOYINTAKE + 1.0;
+    public static final double AUTOSHOOT = RobotMap.AUTOSPINUPSHOOT1 + 2.0;
+    public static final double AUTODRIVEBACK = RobotMap.AUTOSHOOT + 2.0;
+    public static final double AUTOINTAKE = RobotMap.AUTODRIVEBACK + 1.0;
+    public static final double AUTODRIVEFORWARD = RobotMap.AUTOINTAKE + 1.0;
+    public static final double AUTOSPINUPSHOOT2 = RobotMap.AUTODRIVEFORWARD + 1.0;
+    public static final double AUTOSHOOT2 = RobotMap.AUTOSPINUPSHOOT2 + 1.0;
+    
+
+    public static final double AUTODRIVESPEED = .5;
+    public static final double AUTOINDEXERSPEED = .5;
+    public static final double AUTODRINTAKESPEED = .5;
+    public static final double AUTODRIVETURN = 0.0;
+    public static final double AUTOSHOOTSPEED = 0.65;
 
     //operator controls
     public static final int OPERATORINDEXERBUTTON = 1;
@@ -28,16 +35,20 @@ public class RobotMap {
     public static final int INTAKEBUTTONFOR = 5;
     public static final int INTAKEBUTTONBAC = 6;
     public static final int CLIMBERBUTTON = 4;
-    //driver controls 
-    public static final int DRIVERINDEXERSORTINGBUTTON = 2;
+
+    //driver controls...
     
-    //pneumatics
+
+    
+    /*
+    pneumatics
     public static final int SOLCHANNEL1 = 1;
     public static final int SOLCHANNEL2 = 2;
 
-    //pneumatics controls
+    pneumatics controls
     public static final int SOLOFFBUTTON = 5;
     public static final int SOLONBUTTON = 2;
+    */
     
     //shooter motor controller IDs
     public static final int INDEXID = 0;
@@ -48,9 +59,7 @@ public class RobotMap {
     public static final int INTAKEPORT = 4;
     public static final int DRINTAKEPORT = 5;
 
-    //leds (NOT finalized)
-    public static final int BLINKINPORT = 10;
-
+    
     //climb motor ids (NOT finalized, not tested yet)
     public static final int CLIMBAID = 99;
     public static final int CLIMBBID = 100;

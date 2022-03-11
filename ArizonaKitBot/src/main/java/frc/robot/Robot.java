@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.motorcontrol.Talon;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 
 /**
@@ -45,10 +46,10 @@ public class Robot extends TimedRobot {
   TalonSRX indexer = new TalonSRX(RobotMap.INDEXID);
   CANSparkMax shooter = new CANSparkMax(RobotMap.SHOOTID, MotorType.kBrushless);
   TalonSRX shootIntake = new TalonSRX(RobotMap.SHOOTINTAKEID);
+
   //drive
   MotorControllerGroup l = new MotorControllerGroup(l1, l2);
   MotorControllerGroup r = new MotorControllerGroup(r1, r2);
-
   DifferentialDrive drive = new DifferentialDrive(l,r);
 
   //controllers
@@ -83,8 +84,8 @@ public class Robot extends TimedRobot {
   PIDController PID = new PIDController(p, i, d);
 
   //pneumatics
-  DoubleSolenoid sol = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, RobotMap.SOLCHANNEL1, RobotMap.SOLCHANNEL2);
-  Compressor compressor = new Compressor(PneumaticsModuleType.CTREPCM);
+  /*DoubleSolenoid sol = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, RobotMap.SOLCHANNEL1, RobotMap.SOLCHANNEL2);
+  Compressor compressor = new Compressor(PneumaticsModuleType.CTREPCM);*/
 
   
   /**
@@ -109,21 +110,46 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-    if(timer.get()<RobotMap.AUTOTIME1){
-      drive.arcadeDrive(RobotMap.AUTODRIVESPEED1, RobotMap.AUTODRIVETURN1);
+    if(timer.get()<RobotMap.AUTODEPLOYINTAKE){
+      //intake down
+      deployRetract.set(0.5);
+      //spin up shooter
+      shooter.set(RobotMap.AUTOSHOOTSPEED);
     }
-    if(timer.get()<RobotMap.AUTOTIME2 && timer.get()>RobotMap.AUTOTIME1){
-
+    if(timer.get()<RobotMap.AUTOSPINUPSHOOT1 && timer.get()>RobotMap.AUTODEPLOYINTAKE){
+      deployRetract.set(0);
     }
-    if(timer.get()<RobotMap.AUTOTIME3 && timer.get()>RobotMap.AUTOTIME2){
-
+    if(timer.get()<RobotMap.AUTOSHOOT && timer.get()>RobotMap.AUTOSPINUPSHOOT1){
+      shootIntake.set(ControlMode.PercentOutput, RobotMap.AUTODRINTAKESPEED);
+      indexer.set(ControlMode.PercentOutput, RobotMap.AUTOINDEXERSPEED);
     }
-    if(timer.get()>RobotMap.AUTOTIME3){
-
+    if(timer.get()<RobotMap.AUTOSHOOT && timer.get()>RobotMap.AUTODRIVEBACK){
+      shooter.set(0);
+      shootIntake.set(ControlMode.PercentOutput, 0);
+      indexer.set(ControlMode.PercentOutput, 0);
     }
-    if(timer.get()>RobotMap.AUTOTIME3 + RobotMap.AUTOTIME3DURATION){
-      
+    if(timer.get()<RobotMap.AUTODRIVEBACK && timer.get()>RobotMap.AUTOINTAKE){
+      drive.arcadeDrive(-RobotMap.AUTODRIVESPEED, RobotMap.AUTODRIVETURN);
+      intake.set(0.7);
     }
+    if(timer.get()<RobotMap.AUTOINTAKE && timer.get()>RobotMap.AUTODRIVEFORWARD){
+      drive.arcadeDrive(0, 0);
+    }
+    if(timer.get()<RobotMap.AUTODRIVEFORWARD && timer.get()>RobotMap.AUTOSPINUPSHOOT2){
+      drive.arcadeDrive(RobotMap.AUTODRIVESPEED, RobotMap.AUTODRIVETURN);
+      intake.set(0);
+    }
+    if(timer.get()<RobotMap.AUTOSPINUPSHOOT2 && timer.get()>RobotMap.AUTOSHOOT2){
+      drive.arcadeDrive(0, 0);
+      shootIntake.set(ControlMode.PercentOutput, RobotMap.AUTODRINTAKESPEED);
+      indexer.set(ControlMode.PercentOutput, RobotMap.AUTOINDEXERSPEED);
+    }
+    if(timer.get()>RobotMap.AUTOSHOOT2){
+      shooter.set(0);
+      shootIntake.set(ControlMode.PercentOutput, 0);
+      indexer.set(ControlMode.PercentOutput, 0);
+    }
+    
     
   }
 
@@ -301,6 +327,8 @@ public void intake(){
       led.set(-0.49);
     }
   }
+
+  
 
   public void updateLimeLight(){
     final double STEER= 0.1;      //how hard to turn
