@@ -164,6 +164,7 @@ public class Robot extends TimedRobot {
     speedButtons();
     deployRetractIntake();
     deployClimber();
+    shootBothControllers();
   }
 
   @Override
@@ -178,17 +179,17 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {}
 
-public void intake(){
-  if(driver.getRawButton(RobotMap.INTAKEBUTTONFOR)){
-    intake.set(0.7);
+  public void intake(){
+    if(driver.getRawButton(RobotMap.INTAKEBUTTONFOR)){
+      intake.set(0.7);
+    }
+    if(driver.getRawButton(RobotMap.INTAKEBUTTONBAC)){
+      intake.set(-0.7);
+    }
+    if (!driver.getRawButton(RobotMap.INTAKEBUTTONFOR)&&!driver.getRawButton(RobotMap.INTAKEBUTTONBAC))
+  {intake.set(0.0);}
+    
   }
-  if(driver.getRawButton(RobotMap.INTAKEBUTTONBAC)){
-    intake.set(-0.7);
-  }
-  if (!driver.getRawButton(RobotMap.INTAKEBUTTONFOR)&&!driver.getRawButton(RobotMap.INTAKEBUTTONBAC))
- {intake.set(0.0);}
-  
-}
   public void deployRetractIntake(){
     deployRetract.set(operator.getRawAxis(5)*0.4);
   }
@@ -264,27 +265,25 @@ public void intake(){
     drive.arcadeDrive(driver.getRawAxis(0) * 0.2, driver.getRawAxis(3) * 0.2);
     if(driver.getRawAxis(2) > 0){
     drive.arcadeDrive(driver.getRawAxis(0) * 0.2, -driver.getRawAxis(2) * 0.2);
+    }
   }
- }
 
  //fast button for xbox controller
- else if(driver.getRawButton(1)){
-   drive.arcadeDrive(-driver.getRawAxis(0), -driver.getRawAxis(3));
-   if(driver.getRawAxis(2)>0){
-     drive.arcadeDrive(-driver.getRawAxis(0), driver.getRawAxis(2));
-   }
- }
- 
- 
+  else if(driver.getRawButton(1)){
+    drive.arcadeDrive(-driver.getRawAxis(0), -driver.getRawAxis(3));
+    if(driver.getRawAxis(2)>0){
+      drive.arcadeDrive(-driver.getRawAxis(0), driver.getRawAxis(2));
+    }
+  }
 
  //default condition for neither buttons active
- else if(!driver.getRawButton(3) || !driver.getRawButton(1)){
-  drive.arcadeDrive(driver.getRawAxis(0) * 0.8, driver.getRawAxis(3) * 0.8);
-  if(driver.getRawAxis(2) > 0){
-    drive.arcadeDrive(driver.getRawAxis(0) * 0.8, -driver.getRawAxis(2) * 0.8);
+  else if(!driver.getRawButton(3) || !driver.getRawButton(1)){
+    drive.arcadeDrive(driver.getRawAxis(0) * 0.8, driver.getRawAxis(3) * 0.8);
+    if(driver.getRawAxis(2) > 0){
+      drive.arcadeDrive(driver.getRawAxis(0) * 0.8, -driver.getRawAxis(2) * 0.8);
+    }
   }
- }
-  } 
+} 
   public void deployClimber(){
     if(timer.get()>=120){
       if(operator.getPOV() == 0){
@@ -307,6 +306,9 @@ public void intake(){
     if(PID.getPositionError()>3){
 
       //maybe supposed to be tank drive??
+      /**drive.arcadeDrive(0,turn); for no forward movement, mess around with sign of turn
+        *drive.tankDrive(turn,-turn); for tank drive, mess around with signs and pid values
+      */
       drive.arcadeDrive(turn, -turn);
     }else{
       drive.arcadeDrive(targetSpeed, turn);
