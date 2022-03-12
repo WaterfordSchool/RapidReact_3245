@@ -52,8 +52,8 @@ public class RobotMap {
     */
     
     //shooter motor controller IDs
-    public static final int INDEXID = 5;
-    public static final int SHOOTID = 0;
+    public static final int INDEXID = 0;
+    public static final int SHOOTID = 5;
     public static final int SHOOTINTAKEID = 6;
 
     //intake motor controller ports (pwm)
