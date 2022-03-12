@@ -160,10 +160,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    shootIntake();
-    shoot();
     intake();
-    indexer();
     speedButtons();
     deployRetractIntake();
     deployClimber();
@@ -253,9 +250,7 @@ public void intake(){
       comboButtonPressed = true;
     }
     if(!driver.getRawButton(RobotMap.SHOOTCOMBINATIONBUTTON)){
-      shootIntake.set(ControlMode.PercentOutput, 0);    
-      indexer.set(ControlMode.PercentOutput, 0);
-      shooter.set(0);
+      
       comboButtonPressed = false;
       shoot();
       shootIntake();
