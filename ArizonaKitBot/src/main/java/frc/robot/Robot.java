@@ -83,6 +83,8 @@ public class Robot extends TimedRobot {
   double p = Math.pow(0.5, 9);
   PIDController PID = new PIDController(p, i, d);
 
+  boolean comboButtonPressed = false;
+
   //pneumatics
   /*DoubleSolenoid sol = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, RobotMap.SOLCHANNEL1, RobotMap.SOLCHANNEL2);
   Compressor compressor = new Compressor(PneumaticsModuleType.CTREPCM);*/
@@ -186,7 +188,7 @@ public void intake(){
   if(driver.getRawButton(RobotMap.INTAKEBUTTONBAC)){
     intake.set(-0.7);
   }
-  if (!driver.getRawButton(1)&&!driver.getRawButton(2))
+  if (!driver.getRawButton(RobotMap.INTAKEBUTTONFOR)&&!driver.getRawButton(RobotMap.INTAKEBUTTONBAC))
  {intake.set(0.0);}
   
 }
@@ -194,32 +196,33 @@ public void intake(){
     deployRetract.set(operator.getRawAxis(5)*0.4);
   }
   public void shootIntake(){
-    if(operator.getRawButton(1)){
+    if(operator.getRawButton(RobotMap.SHOOTINTAKEBACKBUTTON)){
       shootIntake.set(ControlMode.PercentOutput, -0.5);
 
     }
-    if(operator.getRawButton(4)){
+    if(operator.getRawButton(RobotMap.SHOOTINTAKEFORWARDBUTTON)){
       shootIntake.set(ControlMode.PercentOutput, 0.5);
 
     }
-    if(!operator.getRawButton(1) && !operator.getRawButton(4)){
+    if(!operator.getRawButton(RobotMap.SHOOTINTAKEBACKBUTTON) && !operator.getRawButton(RobotMap.SHOOTINTAKEFORWARDBUTTON)){
       shootIntake.set(ControlMode.PercentOutput, 0.0);
     }
   }
   public void indexer(){
-    if(operator.getRawButton(2)){
+    if(operator.getRawButton(RobotMap.INDEXERBUTTON)){
       indexer.set(ControlMode.PercentOutput, 0.5);
 
     }
-    if(!operator.getRawButton(2)){
+    if(!operator.getRawButton(RobotMap.INDEXERBUTTON)){
       indexer.set(ControlMode.PercentOutput, 0.0);
     }
   }
   public void shoot(){
-    if(operator.getRawButton(3)){
+    if(operator.getRawButton(RobotMap.SHOOTBUTTON)){
       shooter.set(0.65);
+
     }
-    if(!operator.getRawButton(3)){
+    if(!operator.getRawButton(RobotMap.SHOOTBUTTON)){
       shooter.set(0.0);
     }
   }
@@ -242,17 +245,21 @@ public void intake(){
   }
 
   
-  public void allThree(){
-    if(operator.getRawButton(4)){
+  public void shootBothControllers(){
+    if(driver.getRawButton(RobotMap.SHOOTCOMBINATIONBUTTON)){
       shootIntake.set(ControlMode.PercentOutput, -0.5);    
       indexer.set(ControlMode.PercentOutput, 0.5);
       shooter.set(0.65);
-
+      comboButtonPressed = true;
     }
-    if(!operator.getRawButton(4)){
+    if(!driver.getRawButton(RobotMap.SHOOTCOMBINATIONBUTTON)){
       shootIntake.set(ControlMode.PercentOutput, 0);    
       indexer.set(ControlMode.PercentOutput, 0);
       shooter.set(0);
+      comboButtonPressed = false;
+      shoot();
+      shootIntake();
+      indexer();
     }
   }
 
@@ -285,15 +292,16 @@ public void intake(){
   } 
   public void deployClimber(){
     if(timer.get()>=120){
-      if(operator.getRawButton(RobotMap.CLIMBERBUTTON));
-      //change magnitude once test
-      climbA.set(ControlMode.PercentOutput, 0.4);
-      climbB.set(ControlMode.PercentOutput, 0.4);
-    }
-      if(!operator.getRawButton(RobotMap.CLIMBERBUTTON)){
+      if(operator.getPOV() == 0){
+        climbA.set(ControlMode.PercentOutput, 0.4);
+        climbB.set(ControlMode.PercentOutput, 0.4);      
+      }
+      
+      if(operator.getPOV()!=0){
         climbA.set(ControlMode.PercentOutput, 0);
         climbB.set(ControlMode.PercentOutput, 0);
       }
+    }
   }
   
   public void turnTo(double targetAngle, double targetSpeed){
