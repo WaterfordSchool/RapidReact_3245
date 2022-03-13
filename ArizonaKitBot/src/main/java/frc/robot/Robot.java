@@ -58,7 +58,7 @@ public class Robot extends TimedRobot {
 
   //intake motors
   Talon intake = new Talon(RobotMap.INTAKEPORT);
-  Talon deployRetract = new Talon(RobotMap.DRINTAKEPORT);
+  Talon deployRetract = new Talon(RobotMap.DRINTAKEID);
 
   //climb motors
   TalonSRX climbA = new TalonSRX(RobotMap.CLIMBAID);
