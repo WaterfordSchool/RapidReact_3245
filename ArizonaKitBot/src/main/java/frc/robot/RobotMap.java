@@ -9,7 +9,7 @@ public class RobotMap {
 
     //pwm ports
     public static final int BLINKINPORT = 1;
-
+    
     //auto durations
     public static final double AUTODEPLOYINTAKE = 1.5;
     public static final double AUTOSPINUPSHOOT1 = RobotMap.AUTODEPLOYINTAKE + 0.15;
