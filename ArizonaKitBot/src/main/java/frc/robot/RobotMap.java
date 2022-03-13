@@ -32,7 +32,7 @@ public class RobotMap {
     public static final int DEPLOYRETRACTINTAKEAXIS = 1;
     public static final int SHOOTINTAKEFORWARDBUTTON = 1;
     public static final int SHOOTINTAKEBACKBUTTON = 3;
-    public static final int SHOOTBUTTON = 3;
+    public static final int SHOOTBUTTON = 4;
 
     //driver controls...
     public static final int SHOOTCOMBINATIONBUTTON = 2;

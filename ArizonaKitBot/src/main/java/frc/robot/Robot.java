@@ -242,14 +242,20 @@ public class Robot extends TimedRobot {
     }
   }
 
-  
+  /**
+   * @author Lauren
+   * handles shooting for both controllers
+   * when button {@code RobotMap.SHOOTCOMBINATIONBUTTON} is pressed, 
+   * overrides all operator commands and activates all shooting 
+   * motors.
+   */
   public void shootBothControllers(){
     if(driver.getRawButton(RobotMap.SHOOTCOMBINATIONBUTTON)){
       shootIntake.set(ControlMode.PercentOutput, -0.5);    
       indexer.set(ControlMode.PercentOutput, 0.5);
       shooter.set(0.65);
       comboButtonPressed = true;
-    }
+    }//else
     if(!driver.getRawButton(RobotMap.SHOOTCOMBINATIONBUTTON)){
       
       comboButtonPressed = false;
