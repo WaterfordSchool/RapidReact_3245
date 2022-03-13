@@ -57,7 +57,7 @@ public class RobotMap {
     public static final int SHOOTINTAKEID = 6;
 
     //intake motor controller id
-    public static final int INTAKEPORT = 4;
+    public static final int INTAKEPORT = 9;
     public static final int DRINTAKEID = 8;
     //climb motor ids (NOT finalized, not tested yet)
     public static final int CLIMBAID = 99;
