@@ -62,7 +62,7 @@ public class RobotMap {
     //problem motor controller^.
 
     //climb motor ids (NOT finalized, not tested yet)
-    public static final int CLIMBAPORT = 99;
-    public static final int CLIMBBPORT = 100;
+    public static final int CLIMBAPORT = 0;
+    public static final int CLIMBBPORT = 1;
 
 }
