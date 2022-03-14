@@ -9,7 +9,7 @@ public class RobotMap {
 
     //pwm ports
     public static final int BLINKINPORT = 1;
-    
+
     //auto durations
     public static final double AUTODEPLOYINTAKE = 1.5;
     public static final double AUTOSPINUPSHOOT1 = RobotMap.AUTODEPLOYINTAKE + 0.15;
@@ -59,8 +59,10 @@ public class RobotMap {
     //intake motor controller id
     public static final int INTAKEPORT = 9;
     public static final int DRINTAKEID = 8;
+    //problem motor controller^.
+
     //climb motor ids (NOT finalized, not tested yet)
-    public static final int CLIMBAID = 99;
-    public static final int CLIMBBID = 100;
+    public static final int CLIMBAPORT = 99;
+    public static final int CLIMBBPORT = 100;
 
 }

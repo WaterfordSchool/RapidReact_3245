@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.motorcontrol.Talon;
+import edu.wpi.first.wpilibj.motorcontrol.VictorSP;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 
@@ -61,8 +62,8 @@ public class Robot extends TimedRobot {
   Talon deployRetract = new Talon(RobotMap.DRINTAKEID);
 
   //climb motors
-  TalonSRX climbA = new TalonSRX(RobotMap.CLIMBAID);
-  TalonSRX climbB = new TalonSRX(RobotMap.CLIMBBID);
+  VictorSP climbB = new VictorSP(RobotMap.CLIMBAPORT);
+  VictorSP climbA = new VictorSP(RobotMap.CLIMBBPORT);
 
   //gross toggling things
   boolean toggleOn = false;
@@ -293,13 +294,13 @@ public class Robot extends TimedRobot {
   public void deployClimber(){
     if(timer.get()>=120){
       if(operator.getPOV() == 0){
-        climbA.set(ControlMode.PercentOutput, 0.4);
-        climbB.set(ControlMode.PercentOutput, 0.4);      
+        climbA.set(0.4);
+        climbB.set(0.4);      
       }
       
       if(operator.getPOV()!=0){
-        climbA.set(ControlMode.PercentOutput, 0);
-        climbB.set(ControlMode.PercentOutput, 0);
+        climbA.set(0);
+        climbB.set(0);
       }
     }
   }
@@ -315,7 +316,7 @@ public class Robot extends TimedRobot {
       /**drive.arcadeDrive(0,turn); for no forward movement, mess around with sign of turn
         *drive.tankDrive(turn,-turn); for tank drive, mess around with signs and pid values
       */
-      drive.arcadeDrive(turn, -turn);
+      drive.tankDrive(turn, -turn);
     }else{
       drive.arcadeDrive(targetSpeed, turn);
     }
