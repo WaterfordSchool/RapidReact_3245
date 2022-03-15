@@ -62,8 +62,8 @@ public class Robot extends TimedRobot {
   Talon deployRetract = new Talon(RobotMap.DRINTAKEID);
 
   //climb motors
-  VictorSP climbB = new VictorSP(RobotMap.CLIMBAPORT);
-  VictorSP climbA = new VictorSP(RobotMap.CLIMBBPORT);
+  Spark climbB = new Spark(RobotMap.CLIMBAPORT);
+  Spark climbA = new Spark(RobotMap.CLIMBBPORT);
 
   //gross toggling things
   boolean toggleOn = false;
@@ -295,7 +295,7 @@ public class Robot extends TimedRobot {
     if(timer.get()>=120){
       if(operator.getPOV() == 0){
         climbA.set(0.4);
-        climbB.set(0.4);      
+        climbB.set(0.4);     
       }
       
       if(operator.getPOV()!=0){
