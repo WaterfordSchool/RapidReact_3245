@@ -12,16 +12,17 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
-import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
+// import edu.wpi.first.wpilibj.Compressor;
+// import edu.wpi.first.wpilibj.DoubleSolenoid;
+// import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.motorcontrol.Talon;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.motorcontrol.VictorSP;
+// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 
 /**
@@ -58,11 +59,11 @@ public class Robot extends TimedRobot {
 
   //intake motors
   Talon intake = new Talon(RobotMap.INTAKEPORT);
-  Talon deployRetract = new Talon(RobotMap.DRINTAKEPORT);
+  Talon deployRetract = new Talon(RobotMap.DRINTAKEID);
 
   //climb motors
-  TalonSRX climbA = new TalonSRX(RobotMap.CLIMBAID);
-  TalonSRX climbB = new TalonSRX(RobotMap.CLIMBBID);
+  Spark climbB = new Spark(RobotMap.CLIMBAPORT);
+  Spark climbA = new Spark(RobotMap.CLIMBBPORT);
 
   //gross toggling things
   boolean toggleOn = false;
@@ -242,14 +243,20 @@ public class Robot extends TimedRobot {
     }
   }
 
-  
+  /**
+   * @author Lauren
+   * handles shooting for both controllers
+   * when button {@code RobotMap.SHOOTCOMBINATIONBUTTON} is pressed, 
+   * overrides all operator commands and activates all shooting 
+   * motors.
+   */
   public void shootBothControllers(){
     if(driver.getRawButton(RobotMap.SHOOTCOMBINATIONBUTTON)){
       shootIntake.set(ControlMode.PercentOutput, -0.5);    
       indexer.set(ControlMode.PercentOutput, 0.5);
       shooter.set(0.65);
       comboButtonPressed = true;
-    }
+    }//else
     if(!driver.getRawButton(RobotMap.SHOOTCOMBINATIONBUTTON)){
       
       comboButtonPressed = false;
@@ -287,13 +294,13 @@ public class Robot extends TimedRobot {
   public void deployClimber(){
     if(timer.get()>=120){
       if(operator.getPOV() == 0){
-        climbA.set(ControlMode.PercentOutput, 0.4);
-        climbB.set(ControlMode.PercentOutput, 0.4);      
+        climbA.set(0.4);
+        climbB.set(0.4);     
       }
       
       if(operator.getPOV()!=0){
-        climbA.set(ControlMode.PercentOutput, 0);
-        climbB.set(ControlMode.PercentOutput, 0);
+        climbA.set(0);
+        climbB.set(0);
       }
     }
   }
@@ -309,7 +316,7 @@ public class Robot extends TimedRobot {
       /**drive.arcadeDrive(0,turn); for no forward movement, mess around with sign of turn
         *drive.tankDrive(turn,-turn); for tank drive, mess around with signs and pid values
       */
-      drive.arcadeDrive(turn, -turn);
+      drive.tankDrive(turn, -turn);
     }else{
       drive.arcadeDrive(targetSpeed, turn);
     }
