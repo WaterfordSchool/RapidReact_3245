@@ -8,7 +8,7 @@ public class RobotMap {
     public static final int L2CANID = 4;
 
     //pwm ports
-    public static final int BLINKINPORT = 1;
+    public static final int BLINKINPORT = 3;
 
     //auto durations
     public static final double AUTODEPLOYINTAKE = 1.5;
@@ -42,7 +42,7 @@ public class RobotMap {
 
     
     /*
-    pneumatics
+    pneumatics (henry project)
     public static final int SOLCHANNEL1 = 1;
     public static final int SOLCHANNEL2 = 2;
 
@@ -61,7 +61,7 @@ public class RobotMap {
     public static final int DRINTAKEID = 8;
     //problem motor controller^.
 
-    //climb motor ids (NOT finalized, not tested yet)
+    //climb motor ids (not tested yet)
     public static final int CLIMBAPORT = 0;
     public static final int CLIMBBPORT = 1;
 
