@@ -58,8 +58,8 @@ public class Robot extends TimedRobot {
   XboxController operator = new XboxController(1);
 
   //intake motors
-  Talon intake = new Talon(RobotMap.INTAKEPORT);
-  Talon deployRetract = new Talon(RobotMap.DRINTAKEID);
+  CANSparkMax intake = new CANSparkMax(RobotMap.INTAKEPORT, MotorType.kBrushless);
+  CANSparkMax deployRetract = new CANSparkMax(RobotMap.DRINTAKEID, MotorType.kBrushless);
 
   //climb motors
   Spark climbB = new Spark(RobotMap.CLIMBAPORT);
@@ -164,7 +164,7 @@ public class Robot extends TimedRobot {
     intake();
     speedButtons();
     deployRetractIntake();
-    deployClimber();
+    retractDeployClimber();
     shootBothControllers();
   }
 
@@ -178,7 +178,9 @@ public class Robot extends TimedRobot {
   public void testInit() {}
 
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+    
+  }
 
   public void intake(){
     if(driver.getRawButton(RobotMap.INTAKEBUTTONFOR)){
@@ -192,7 +194,7 @@ public class Robot extends TimedRobot {
     
   }
   public void deployRetractIntake(){
-    deployRetract.set(operator.getRawAxis(5)*0.4);
+    deployRetract.set(operator.getRawAxis(RobotMap.DEPLOYRETRACTINTAKEAXIS)*0.4);
   }
   public void shootIntake(){
     if(operator.getRawButton(RobotMap.SHOOTINTAKEBACKBUTTON)){
@@ -291,19 +293,25 @@ public class Robot extends TimedRobot {
     }
   }
 } 
-  public void deployClimber(){
-    if(timer.get()>=120){
+  public void retractDeployClimber(){
+    //if(timer.get()>=120){
       if(operator.getPOV() == 0){
         climbA.set(0.4);
         climbB.set(0.4);     
       }
       
-      if(operator.getPOV()!=0){
+      if(operator.getPOV() == 180){
+        climbA.set(-0.4);
+        climbB.set(-0.4);     
+      }
+      if(operator.getPOV()!=0 && operator.getPOV()!= 180){
         climbA.set(0);
         climbB.set(0);
       }
+
     }
-  }
+  //}
+  
   
   public void turnTo(double targetAngle, double targetSpeed){
     //angle = 0-2^16
