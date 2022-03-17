@@ -279,9 +279,9 @@ public class Robot extends TimedRobot {
 
  //fast button for xbox controller
   else if(driver.getRawButton(1)){
-    drive.arcadeDrive(-driver.getRawAxis(0), -driver.getRawAxis(3));
+    drive.arcadeDrive(driver.getRawAxis(0), driver.getRawAxis(3));
     if(driver.getRawAxis(2)>0){
-      drive.arcadeDrive(-driver.getRawAxis(0), driver.getRawAxis(2));
+      drive.arcadeDrive(driver.getRawAxis(0), -driver.getRawAxis(2));
     }
   }
 
