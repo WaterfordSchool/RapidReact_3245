@@ -113,7 +113,18 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-    if(timer.get()<RobotMap.AUTODEPLOYINTAKE){
+    double delay = 0.5;
+    if(timer.get()<1.6 + delay){
+      shooter.set(RobotMap.AUTOSHOOTSPEED);
+      shootIntake.set(ControlMode.PercentOutput, RobotMap.AUTOSHOOTINTAKESPEED);
+      indexer.set(ControlMode.PercentOutput, RobotMap.AUTOINDEXERSPEED);
+    }
+    if(timer.get()>1.6 + delay){
+      shooter.set(0);
+      shootIntake.set(ControlMode.PercentOutput, 0);
+      indexer.set(ControlMode.PercentOutput, 0);
+    }
+   /* if(timer.get()<RobotMap.AUTODEPLOYINTAKE){
       //intake down
       deployRetract.set(0.5);
       //spin up shooter
@@ -151,7 +162,7 @@ public class Robot extends TimedRobot {
       shooter.set(0);
       shootIntake.set(ControlMode.PercentOutput, 0);
       indexer.set(ControlMode.PercentOutput, 0);
-    }
+    }*/
     
     
   }
@@ -161,7 +172,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    intake();
+    //intake();
+    operatorIntake();
     speedButtons();
     deployRetractIntake();
     retractDeployClimber();
@@ -182,6 +194,18 @@ public class Robot extends TimedRobot {
     
   }
 
+  public void operatorIntake(){
+    if(operator.getRawAxis(RobotMap.OPINTAKEFORWARDAXIS)>0){
+      intake.set(0.7);
+    }
+    if(operator.getRawAxis(RobotMap.OPINTAKEBACKAXIS)>0){
+      intake.set(-0.7);
+    }
+    if(operator.getRawAxis(RobotMap.OPINTAKEFORWARDAXIS)==0 && operator.getRawAxis(RobotMap.OPINTAKEBACKAXIS)==0){
+      intake.set(0);
+    }
+  }
+
   public void intake(){
     if(driver.getRawButton(RobotMap.INTAKEBUTTONFOR)){
       intake.set(0.7);
@@ -191,6 +215,7 @@ public class Robot extends TimedRobot {
     }
     if (!driver.getRawButton(RobotMap.INTAKEBUTTONFOR)&&!driver.getRawButton(RobotMap.INTAKEBUTTONBAC))
   {intake.set(0.0);}
+  
     
   }
   public void deployRetractIntake(){
@@ -220,7 +245,7 @@ public class Robot extends TimedRobot {
   }
   public void shoot(){
     if(operator.getRawButton(RobotMap.SHOOTBUTTON)){
-      shooter.set(0.65);
+      shooter.set(0.75);
 
     }
     if(!operator.getRawButton(RobotMap.SHOOTBUTTON)){
@@ -231,7 +256,7 @@ public class Robot extends TimedRobot {
     updateToggle();
 
     if(toggleOn){
-      shooter.set(0.65);
+      shooter.set(0.75);
     }
     else{shooter.set(0);}
   }
@@ -256,7 +281,7 @@ public class Robot extends TimedRobot {
     if(driver.getRawButton(RobotMap.SHOOTCOMBINATIONBUTTON)){
       shootIntake.set(ControlMode.PercentOutput, -0.5);    
       indexer.set(ControlMode.PercentOutput, 0.5);
-      shooter.set(0.65);
+      shooter.set(0.75);
       comboButtonPressed = true;
     }//else
     if(!driver.getRawButton(RobotMap.SHOOTCOMBINATIONBUTTON)){
@@ -296,13 +321,13 @@ public class Robot extends TimedRobot {
   public void retractDeployClimber(){
     //if(timer.get()>=120){
       if(operator.getPOV() == 0){
-        climbA.set(0.4);
-        climbB.set(0.4);     
+        climbA.set(-0.4);
+        climbB.set(-0.4);     
       }
       
       if(operator.getPOV() == 180){
-        climbA.set(-0.4);
-        climbB.set(-0.4);     
+        climbA.set(0.4);
+        climbB.set(0.4);     
       }
       if(operator.getPOV()!=0 && operator.getPOV()!= 180){
         climbA.set(0);

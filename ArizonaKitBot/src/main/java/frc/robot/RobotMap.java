@@ -26,20 +26,29 @@ public class RobotMap {
     public static final double AUTODRIVESPEED = .15;
     public static final double AUTOINDEXERSPEED = .5;
     public static final double AUTODRINTAKESPEED = .5;
+    public static final double AUTOSHOOTINTAKESPEED = -0.5;
     public static final double AUTODRIVETURN = 0.0;
-    public static final double AUTOSHOOTSPEED = 0.65;
+    public static final double AUTOSHOOTSPEED = 0.75;
 
     //operator controls
     public static final int INDEXERBUTTON = 2;
     public static final int DEPLOYRETRACTINTAKEAXIS = 1;
-    public static final int SHOOTINTAKEFORWARDBUTTON = 1;
-    public static final int SHOOTINTAKEBACKBUTTON = 3;
+    public static final int SHOOTINTAKEFORWARDBUTTON = 5;
+    public static final int SHOOTINTAKEBACKBUTTON = 6;
     public static final int SHOOTBUTTON = 4;
+    public static final int OPINTAKEFORWARDAXIS = 2;
+    public static final int OPINTAKEBACKAXIS = 3;
+    
+
+    //intake forward:3 axis
+    //bac 2
+
+    //shoot intake: bumpers, for6 bac5
 
     //driver controls...
     public static final int SHOOTCOMBINATIONBUTTON = 2;
-    public static final int INTAKEBUTTONBAC = 5;
-    public static final int INTAKEBUTTONFOR = 6;
+    public static final int INTAKEBUTTONBAC = 6;
+    public static final int INTAKEBUTTONFOR = 5;
 
 
     
