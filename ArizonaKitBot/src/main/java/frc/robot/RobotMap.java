@@ -17,18 +17,18 @@ public class RobotMap {
     public static final double AUTOSPINUPSHOOT1 = RobotMap.AUTODEPLOYINTAKE + 0.15;
     public static final double AUTOSHOOT = RobotMap.AUTOSPINUPSHOOT1 + 2.0;
     public static final double AUTODRIVEBACK = RobotMap.AUTOSHOOT + 2.0;
-    public static final double AUTOINTAKE = RobotMap.AUTODRIVEBACK + 2.5;
+    public static final double AUTOINTAKE = RobotMap.AUTODRIVEBACK + 7.4;
     public static final double AUTODRIVEFORWARD = RobotMap.AUTOINTAKE + 1.0;
     public static final double AUTOSPINUPSHOOT2 = RobotMap.AUTODRIVEFORWARD + 2.5;
     public static final double AUTOSHOOT2 = RobotMap.AUTOSPINUPSHOOT2 + 0.3;
     
     //auto speeds/magnitudes
     public static final double AUTODRIVESPEED = .15;
-    public static final double AUTOINDEXERSPEED = .5;
+    public static final double AUTOINDEXERSPEED = .9;
     public static final double AUTODRINTAKESPEED = .5;
     public static final double AUTOSHOOTINTAKESPEED = -0.5;
     public static final double AUTODRIVETURN = 0.0;
-    public static final double AUTOSHOOTSPEED = 0.75;
+    public static final double AUTOSHOOTSPEED = 0.625;
 
     //operator controls
     public static final int INDEXERBUTTON = 2;

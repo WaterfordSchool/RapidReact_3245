@@ -113,20 +113,57 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
+    //good code
     double delay = 0.5;
-    if(timer.get()<1.6 + delay){
+    if(timer.get()<delay){
       shooter.set(RobotMap.AUTOSHOOTSPEED);
+
+      //deployRetract.set(0.2);
+    }
+    if(timer.get()<2.5 + delay && timer.get()> delay){
+      //shooter.set(RobotMap.AUTOSHOOTSPEED);
       shootIntake.set(ControlMode.PercentOutput, RobotMap.AUTOSHOOTINTAKESPEED);
       indexer.set(ControlMode.PercentOutput, RobotMap.AUTOINDEXERSPEED);
+
+
+      //deployRetract.set(0.0);
     }
-    if(timer.get()>1.6 + delay){
+    if(timer.get()>2.5 + delay &&timer.get()<7.4 + delay){
       shooter.set(0);
       shootIntake.set(ControlMode.PercentOutput, 0);
       indexer.set(ControlMode.PercentOutput, 0);
+
+
+      
+      drive.arcadeDrive(0, .36);
+      //intake.set(-0.7);
     }
-   /* if(timer.get()<RobotMap.AUTODEPLOYINTAKE){
+    
+    if(timer.get()>7.4 + delay && timer.get()<8 + delay){
+      drive.arcadeDrive(0,0);
+    }
+    /*if(timer.get()>8 + delay && timer.get()< 12.9 + delay){
+      intake.set(0);
+      drive.arcadeDrive(0, -.36);
+    }
+    if(timer.get()>12.9 + delay && timer.get()< 13.4 + delay){
+      shooter.set(RobotMap.AUTOSHOOTSPEED);
+    }
+    if(timer.get()>13.4 + delay && timer.get()< 15.9 + delay){
+      shootIntake.set(ControlMode.PercentOutput, RobotMap.AUTOSHOOTINTAKESPEED);
+      indexer.set(ControlMode.PercentOutput, RobotMap.AUTOINDEXERSPEED);
+    }
+    if(timer.get()>15.9 + delay && timer.get()<15.9 + 4.9 + delay){
+      shooter.set(0);
+      shootIntake.set(ControlMode.PercentOutput, 0);
+      indexer.set(ControlMode.PercentOutput, 0);
+
+    }*/
+    //end good code
+  
+   /*if(timer.get()<RobotMap.AUTODEPLOYINTAKE){
       //intake down
-      deployRetract.set(0.5);
+      //deployRetract.set(0.5);
       //spin up shooter
       shooter.set(RobotMap.AUTOSHOOTSPEED);
     }
@@ -144,11 +181,12 @@ public class Robot extends TimedRobot {
     }
     if(timer.get()<RobotMap.AUTODRIVEBACK && timer.get()>RobotMap.AUTOINTAKE){
       drive.arcadeDrive(-RobotMap.AUTODRIVESPEED, RobotMap.AUTODRIVETURN);
-      intake.set(0.7);
+      //intake.set(0.7);
     }
     if(timer.get()<RobotMap.AUTOINTAKE && timer.get()>RobotMap.AUTODRIVEFORWARD){
       drive.arcadeDrive(0, 0);
     }
+    
     if(timer.get()<RobotMap.AUTODRIVEFORWARD && timer.get()>RobotMap.AUTOSPINUPSHOOT2){
       drive.arcadeDrive(RobotMap.AUTODRIVESPEED, RobotMap.AUTODRIVETURN);
       intake.set(0);
@@ -236,7 +274,7 @@ public class Robot extends TimedRobot {
   }
   public void indexer(){
     if(operator.getRawButton(RobotMap.INDEXERBUTTON)){
-      indexer.set(ControlMode.PercentOutput, 0.5);
+      indexer.set(ControlMode.PercentOutput, 0.9);
 
     }
     if(!operator.getRawButton(RobotMap.INDEXERBUTTON)){
@@ -245,7 +283,7 @@ public class Robot extends TimedRobot {
   }
   public void shoot(){
     if(operator.getRawButton(RobotMap.SHOOTBUTTON)){
-      shooter.set(0.75);
+      shooter.set(0.7);
 
     }
     if(!operator.getRawButton(RobotMap.SHOOTBUTTON)){
@@ -256,7 +294,7 @@ public class Robot extends TimedRobot {
     updateToggle();
 
     if(toggleOn){
-      shooter.set(0.75);
+      shooter.set(0.7);
     }
     else{shooter.set(0);}
   }
@@ -281,11 +319,12 @@ public class Robot extends TimedRobot {
     if(driver.getRawButton(RobotMap.SHOOTCOMBINATIONBUTTON)){
       shootIntake.set(ControlMode.PercentOutput, -0.5);    
       indexer.set(ControlMode.PercentOutput, 0.5);
-      shooter.set(0.75);
+      shooter.set(0.7);
       comboButtonPressed = true;
     }//else
     if(!driver.getRawButton(RobotMap.SHOOTCOMBINATIONBUTTON)){
       
+
       comboButtonPressed = false;
       shoot();
       shootIntake();
@@ -321,13 +360,13 @@ public class Robot extends TimedRobot {
   public void retractDeployClimber(){
     //if(timer.get()>=120){
       if(operator.getPOV() == 0){
-        climbA.set(-0.4);
-        climbB.set(-0.4);     
+        climbA.set(-0.8);
+        climbB.set(-0.8);     
       }
       
       if(operator.getPOV() == 180){
-        climbA.set(0.4);
-        climbB.set(0.4);     
+        climbA.set(0.8);
+        climbB.set(0.8);     
       }
       if(operator.getPOV()!=0 && operator.getPOV()!= 180){
         climbA.set(0);
