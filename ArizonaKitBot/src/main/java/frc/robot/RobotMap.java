@@ -13,29 +13,58 @@ public class RobotMap {
     public static final int BLINKINPORT = 3;
 
     //auto durations
-    public static final double AUTODEPLOYINTAKE = 1.5;
+    public static final double AUTOSPINUPSHOOTINIT = 2.5;
+    public static final double AUTOSHOOTFIRST = AUTOSPINUPSHOOTINIT + 2.5;
+    public static final double AUTODRIVEBACK = AUTOSHOOTFIRST + 4.9;
+
+    //AUTOSPINUPSHOOTINIT + 7.4;
+
+    public static final double AUTOSTOPDRIVE = AUTODRIVEBACK + .6;
+
+    //AUTOSPINUPSHOOTINIT + 8;
+
+    public static final double AUTODRIVEFOR = AUTOSTOPDRIVE + 3.9;
+
+    //AUTOSPINUPSHOOTINIT + 12.9;
+
+    public static final double AUTOSPINUPSHOOTSEC = AUTODRIVEFOR + AUTOSPINUPSHOOTINIT;
+
+    public static final double AUTOSHOOTSEC = AUTOSPINUPSHOOTSEC + 2.5;
+
+    public static final double AUTOSTOPSHOOTSEC = AUTOSHOOTSEC + 4.9;
+
+
+
+
+    /*public static final double AUTODEPLOYINTAKE = 1.5;
     public static final double AUTOSPINUPSHOOT1 = RobotMap.AUTODEPLOYINTAKE + 0.15;
     public static final double AUTOSHOOT = RobotMap.AUTOSPINUPSHOOT1 + 2.0;
     public static final double AUTODRIVEBACK = RobotMap.AUTOSHOOT + 2.0;
     public static final double AUTOINTAKE = RobotMap.AUTODRIVEBACK + 7.4;
     public static final double AUTODRIVEFORWARD = RobotMap.AUTOINTAKE + 1.0;
     public static final double AUTOSPINUPSHOOT2 = RobotMap.AUTODRIVEFORWARD + 2.5;
-    public static final double AUTOSHOOT2 = RobotMap.AUTOSPINUPSHOOT2 + 0.3;
+    public static final double AUTOSHOOT2 = RobotMap.AUTOSPINUPSHOOT2 + 0.3;*/
     
     //auto speeds/magnitudes
     public static final double AUTODRIVESPEED = .15;
     public static final double AUTOINDEXERSPEED = .9;
     public static final double AUTODRINTAKESPEED = .5;
-    public static final double AUTOSHOOTINTAKESPEED = -0.5;
+    public static final double AUTOSHOOTINTAKESPEED = -1;
+    //^ changed from -0.5, change back if too strong
+    //not change in teleop
+
     public static final double AUTODRIVETURN = 0.0;
     public static final double AUTOSHOOTSPEED = 0.625;
 
     //operator controls
+    
     public static final int INDEXERBUTTON = 2;
     public static final int DEPLOYRETRACTINTAKEAXIS = 1;
     public static final int SHOOTINTAKEFORWARDBUTTON = 5;
     public static final int SHOOTINTAKEBACKBUTTON = 6;
     public static final int SHOOTBUTTON = 4;
+    //y
+
     public static final int OPINTAKEFORWARDAXIS = 2;
     public static final int OPINTAKEBACKAXIS = 3;
     
@@ -49,6 +78,7 @@ public class RobotMap {
     public static final int SHOOTCOMBINATIONBUTTON = 2;
     public static final int INTAKEBUTTONBAC = 6;
     public static final int INTAKEBUTTONFOR = 5;
+    public static final int DRIVERSHOOTINTAKE = 4;
 
 
     
@@ -75,5 +105,8 @@ public class RobotMap {
     //climb motor ids (not tested yet)
     public static final int CLIMBAPORT = 0;
     public static final int CLIMBBPORT = 1;
+
+    //ramping
+    public static final double RAMP_VAL = 0.1;
 
 }

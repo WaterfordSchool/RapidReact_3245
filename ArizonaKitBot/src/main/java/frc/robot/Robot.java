@@ -114,13 +114,15 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     //good code
-    double delay = 0.5;
-    if(timer.get()<delay){
+    double delay = 2.5;
+    //increased from .5
+
+    if(timer.get()<RobotMap.AUTOSPINUPSHOOTINIT){
       shooter.set(RobotMap.AUTOSHOOTSPEED);
 
       //deployRetract.set(0.2);
     }
-    if(timer.get()<2.5 + delay && timer.get()> delay){
+    if(timer.get()<RobotMap.AUTOSHOOTFIRST&& timer.get()> RobotMap.AUTOSPINUPSHOOTINIT){
       //shooter.set(RobotMap.AUTOSHOOTSPEED);
       shootIntake.set(ControlMode.PercentOutput, RobotMap.AUTOSHOOTINTAKESPEED);
       indexer.set(ControlMode.PercentOutput, RobotMap.AUTOINDEXERSPEED);
@@ -128,7 +130,7 @@ public class Robot extends TimedRobot {
 
       //deployRetract.set(0.0);
     }
-    if(timer.get()>2.5 + delay &&timer.get()<7.4 + delay){
+    if(timer.get()>RobotMap.AUTOSHOOTFIRST &&timer.get()<RobotMap.AUTODRIVEBACK){
       shooter.set(0);
       shootIntake.set(ControlMode.PercentOutput, 0);
       indexer.set(ControlMode.PercentOutput, 0);
@@ -139,10 +141,10 @@ public class Robot extends TimedRobot {
       //intake.set(-0.7);
     }
     
-    if(timer.get()>7.4 + delay && timer.get()<8 + delay){
+    if(timer.get()>RobotMap.AUTODRIVEBACK && timer.get()<RobotMap.AUTOSTOPDRIVE){
       drive.arcadeDrive(0,0);
     }
-    /*if(timer.get()>8 + delay && timer.get()< 12.9 + delay){
+    /*if(timer.get()>RobotMap.AUTOSTOPDRIVE && timer.get()< 12.9 + delay){
       intake.set(0);
       drive.arcadeDrive(0, -.36);
     }
@@ -206,16 +208,22 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void teleopInit() {}
+  public void teleopInit() {
+    l1.setOpenLoopRampRate(RobotMap.RAMP_VAL);
+    l2.setOpenLoopRampRate(RobotMap.RAMP_VAL);
+    r1.setOpenLoopRampRate(RobotMap.RAMP_VAL);
+    r2.setOpenLoopRampRate(RobotMap.RAMP_VAL);
+  }
 
   @Override
   public void teleopPeriodic() {
-    //intake();
-    operatorIntake();
+    intake();
+    //operatorIntake();
     speedButtons();
     deployRetractIntake();
     retractDeployClimber();
     shootBothControllers();
+    driverTransition();
   }
 
   @Override
@@ -261,11 +269,11 @@ public class Robot extends TimedRobot {
   }
   public void shootIntake(){
     if(operator.getRawButton(RobotMap.SHOOTINTAKEBACKBUTTON)){
-      shootIntake.set(ControlMode.PercentOutput, -0.5);
+      shootIntake.set(ControlMode.PercentOutput, -1);
 
     }
     if(operator.getRawButton(RobotMap.SHOOTINTAKEFORWARDBUTTON)){
-      shootIntake.set(ControlMode.PercentOutput, 0.5);
+      shootIntake.set(ControlMode.PercentOutput, 1);
 
     }
     if(!operator.getRawButton(RobotMap.SHOOTINTAKEBACKBUTTON) && !operator.getRawButton(RobotMap.SHOOTINTAKEFORWARDBUTTON)){
@@ -308,6 +316,41 @@ public class Robot extends TimedRobot {
     }
   }
 
+public void driverTransition(){
+  if(driver.getRawButton(RobotMap.DRIVERSHOOTINTAKE)){
+    shootIntake.set(ControlMode.PercentOutput, -1);
+
+  }
+  
+  if(!driver.getRawButton(RobotMap.DRIVERSHOOTINTAKE)){
+    shootIntake.set(ControlMode.PercentOutput, 0.0);
+  }
+}
+  public void timeShoot(){
+    if(driver.getRawButton(RobotMap.SHOOTCOMBINATIONBUTTON)){
+      timer.reset();
+      if(timer.get()>.5){
+        //spin up
+          shooter.set(RobotMap.AUTOSHOOTSPEED);
+      }
+      if(timer.get()<.5 + 2.5 && timer.get()> .5){
+        //shooter.set(RobotMap.AUTOSHOOTSPEED);
+        shootIntake.set(ControlMode.PercentOutput, RobotMap.AUTOSHOOTINTAKESPEED);
+        indexer.set(ControlMode.PercentOutput, RobotMap.AUTOINDEXERSPEED);
+      }
+      if(timer.get()>.5 + 2.5){
+        shooter.set(0);
+        shootIntake.set(ControlMode.PercentOutput, 0);
+        indexer.set(ControlMode.PercentOutput, 0);
+      }
+    }
+    if(!driver.getRawButton(RobotMap.SHOOTCOMBINATIONBUTTON)){
+      shooter.set(0);
+      shootIntake.set(ControlMode.PercentOutput, 0);
+      indexer.set(ControlMode.PercentOutput, 0);
+    }
+  }
+
   /**
    * @author Lauren
    * handles shooting for both controllers
@@ -317,8 +360,8 @@ public class Robot extends TimedRobot {
    */
   public void shootBothControllers(){
     if(driver.getRawButton(RobotMap.SHOOTCOMBINATIONBUTTON)){
-      shootIntake.set(ControlMode.PercentOutput, -0.5);    
-      indexer.set(ControlMode.PercentOutput, 0.5);
+      shootIntake.set(ControlMode.PercentOutput, -1);    
+      indexer.set(ControlMode.PercentOutput, 1);
       shooter.set(0.7);
       comboButtonPressed = true;
     }//else
@@ -327,7 +370,7 @@ public class Robot extends TimedRobot {
 
       comboButtonPressed = false;
       shoot();
-      shootIntake();
+      //shootIntake();
       indexer();
     }
   }
