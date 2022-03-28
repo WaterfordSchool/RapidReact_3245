@@ -224,6 +224,7 @@ public class Robot extends TimedRobot {
     retractDeployClimber();
     shootBothControllers();
     driverTransition();
+    timeShoot();
   }
 
   @Override
@@ -269,11 +270,11 @@ public class Robot extends TimedRobot {
   }
   public void shootIntake(){
     if(operator.getRawButton(RobotMap.SHOOTINTAKEBACKBUTTON)){
-      shootIntake.set(ControlMode.PercentOutput, -1);
+      shootIntake.set(ControlMode.PercentOutput, -.4);
 
     }
     if(operator.getRawButton(RobotMap.SHOOTINTAKEFORWARDBUTTON)){
-      shootIntake.set(ControlMode.PercentOutput, 1);
+      shootIntake.set(ControlMode.PercentOutput, .4);
 
     }
     if(!operator.getRawButton(RobotMap.SHOOTINTAKEBACKBUTTON) && !operator.getRawButton(RobotMap.SHOOTINTAKEFORWARDBUTTON)){
@@ -318,7 +319,7 @@ public class Robot extends TimedRobot {
 
 public void driverTransition(){
   if(driver.getRawButton(RobotMap.DRIVERSHOOTINTAKE)){
-    shootIntake.set(ControlMode.PercentOutput, -1);
+    shootIntake.set(ControlMode.PercentOutput, -.4);
 
   }
   
@@ -328,7 +329,9 @@ public void driverTransition(){
 }
   public void timeShoot(){
     if(driver.getRawButton(RobotMap.SHOOTCOMBINATIONBUTTON)){
+      timer.start();
       timer.reset();
+      
       if(timer.get()>.5){
         //spin up
           shooter.set(RobotMap.AUTOSHOOTSPEED);
@@ -370,7 +373,7 @@ public void driverTransition(){
 
       comboButtonPressed = false;
       shoot();
-      //shootIntake();
+      shootIntake();
       indexer();
     }
   }

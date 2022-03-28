@@ -49,7 +49,7 @@ public class RobotMap {
     public static final double AUTODRIVESPEED = .15;
     public static final double AUTOINDEXERSPEED = .9;
     public static final double AUTODRINTAKESPEED = .5;
-    public static final double AUTOSHOOTINTAKESPEED = -1;
+    public static final double AUTOSHOOTINTAKESPEED = -.4;
     //^ changed from -0.5, change back if too strong
     //not change in teleop
 
