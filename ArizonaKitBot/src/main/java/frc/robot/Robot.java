@@ -224,7 +224,7 @@ public class Robot extends TimedRobot {
     retractDeployClimber();
     shootBothControllers();
     driverTransition();
-    timeShoot();
+    //timeShoot();
   }
 
   @Override
@@ -256,17 +256,36 @@ public class Robot extends TimedRobot {
   public void intake(){
     if(driver.getRawButton(RobotMap.INTAKEBUTTONFOR)){
       intake.set(0.7);
+      shootIntake.set(ControlMode.PercentOutput, -0.4);
     }
     if(driver.getRawButton(RobotMap.INTAKEBUTTONBAC)){
       intake.set(-0.7);
+      shootIntake.set(ControlMode.PercentOutput, .4);
     }
     if (!driver.getRawButton(RobotMap.INTAKEBUTTONFOR)&&!driver.getRawButton(RobotMap.INTAKEBUTTONBAC))
-  {intake.set(0.0);}
+  {intake.set(0.0);
+  shootIntake.set(ControlMode.PercentOutput, 0);}
   
     
   }
+
+  public void reverseAll(){
+    if(driver.getPOV() == 180){
+      intake.set(-.7);
+      deployRetract.set(-.4);
+      indexer.set(ControlMode.PercentOutput, -.9);
+      shootIntake.set(ControlMode.PercentOutput, -.4);
+    }
+    else{
+      intake.set(0);
+      deployRetract.set(0);
+      indexer.set(ControlMode.PercentOutput, 0);
+      shootIntake.set(ControlMode.PercentOutput, 0);
+    }
+  }
   public void deployRetractIntake(){
-    deployRetract.set(operator.getRawAxis(RobotMap.DEPLOYRETRACTINTAKEAXIS)*0.4);
+    deployRetract.set(driver.getRawAxis(5)*0.4);
+    
   }
   public void shootIntake(){
     if(operator.getRawButton(RobotMap.SHOOTINTAKEBACKBUTTON)){
@@ -319,7 +338,7 @@ public class Robot extends TimedRobot {
 
 public void driverTransition(){
   if(driver.getRawButton(RobotMap.DRIVERSHOOTINTAKE)){
-    shootIntake.set(ControlMode.PercentOutput, -.4);
+    shootIntake.set(ControlMode.PercentOutput, .4);
 
   }
   
@@ -381,25 +400,25 @@ public void driverTransition(){
   public void speedButtons(){
     //slow button for xbox controller
    if(driver.getRawButton(3)){
-    drive.arcadeDrive(driver.getRawAxis(0) * 0.2, driver.getRawAxis(3) * 0.2);
+    drive.arcadeDrive(-driver.getRawAxis(0) * 0.2, -driver.getRawAxis(3) * 0.2);
     if(driver.getRawAxis(2) > 0){
-    drive.arcadeDrive(driver.getRawAxis(0) * 0.2, -driver.getRawAxis(2) * 0.2);
+    drive.arcadeDrive(-driver.getRawAxis(0) * 0.2, driver.getRawAxis(2) * 0.2);
     }
   }
 
  //fast button for xbox controller
   else if(driver.getRawButton(1)){
-    drive.arcadeDrive(driver.getRawAxis(0), driver.getRawAxis(3));
+    drive.arcadeDrive(-driver.getRawAxis(0), -driver.getRawAxis(3));
     if(driver.getRawAxis(2)>0){
-      drive.arcadeDrive(driver.getRawAxis(0), -driver.getRawAxis(2));
+      drive.arcadeDrive(-driver.getRawAxis(0), driver.getRawAxis(2));
     }
   }
 
  //default condition for neither buttons active
   else if(!driver.getRawButton(3) || !driver.getRawButton(1)){
-    drive.arcadeDrive(driver.getRawAxis(0) * 0.8, driver.getRawAxis(3) * 0.8);
+    drive.arcadeDrive(-driver.getRawAxis(0) * 0.8, -driver.getRawAxis(3) * 0.8);
     if(driver.getRawAxis(2) > 0){
-      drive.arcadeDrive(driver.getRawAxis(0) * 0.8, -driver.getRawAxis(2) * 0.8);
+      drive.arcadeDrive(-driver.getRawAxis(0) * 0.8, driver.getRawAxis(2) * 0.8);
     }
   }
 } 
@@ -444,9 +463,9 @@ public void driverTransition(){
       //up red
       led.set(0.61);
     }
-    if(driver.getPOV() == 180){
+    /*if(driver.getPOV() == 180){
       //down blue
-      led.set(0.87);
+      led.set(0.87);*/
     }
     if(driver.getPOV() == 90){
       //right "twinkles ocean palette"
@@ -460,7 +479,7 @@ public void driverTransition(){
 
   
 
-  public void updateLimeLight(){
+  /*public void UpdateLimeLight(){
     final double STEER= 0.1;      //how hard to turn
     final double DRIVE= 0.25;     //how hard to drive forward
     final double TARGET_AREA = 10;//percentage of screen that the target covers
@@ -483,5 +502,6 @@ public void driverTransition(){
     llSteer = dx*STEER;
     llDrive = (TARGET_AREA- da)*DRIVE;
     llDrive = llDrive>MAX_DRIVE?MAX_DRIVE:llDrive;
-  }
+  }*/
+}
 }
