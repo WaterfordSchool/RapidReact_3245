@@ -465,8 +465,8 @@ public void driverTransition(){
     }
     /*if(driver.getPOV() == 180){
       //down blue
-      led.set(0.87);*/
-    }
+      led.set(0.87);}*/
+    
     if(driver.getPOV() == 90){
       //right "twinkles ocean palette"
       led.set(-0.51);
@@ -503,5 +503,4 @@ public void driverTransition(){
     llDrive = (TARGET_AREA- da)*DRIVE;
     llDrive = llDrive>MAX_DRIVE?MAX_DRIVE:llDrive;
   }*/
-}
 }

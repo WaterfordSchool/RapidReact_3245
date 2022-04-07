@@ -4,13 +4,13 @@ though hell cowers in the face of my agony*/
 
 public class RobotMap {
     //can drive motors; CAN IDS CORRECT
-    public static final int R1CANID = 1;
+    public static final int R1CANID = 3;
     public static final int R2CANID = 2;
-    public static final int L1CANID = 3;
+    public static final int L1CANID = 1;
     public static final int L2CANID = 4;
 
     //pwm ports
-    public static final int BLINKINPORT = 3;
+    public static final int BLINKINPORT = 9;
 
     //auto durations
     public static final double AUTOSPINUPSHOOTINIT = 2.5;
