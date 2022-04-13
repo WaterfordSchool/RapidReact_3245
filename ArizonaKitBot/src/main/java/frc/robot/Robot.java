@@ -346,7 +346,7 @@ public void driverTransition(){
     shootIntake.set(ControlMode.PercentOutput, 0.0);
   }
 }
-  public void timeShoot(){
+public void timeShoot(){
     if(driver.getRawButton(RobotMap.SHOOTCOMBINATIONBUTTON)){
       timer.start();
       timer.reset();
