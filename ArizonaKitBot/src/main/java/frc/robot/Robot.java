@@ -35,10 +35,10 @@ public class Robot extends TimedRobot {
   //drive motors, 4
   CANSparkMax l1 = new CANSparkMax(RobotMap.L1CANID, MotorType.kBrushless);
   CANSparkMax l2 = new CANSparkMax(RobotMap.L2CANID, MotorType.kBrushless);
-  //CANSparkMax l3 = new CANSparkMax(RobotMap.L3CANID, MotorType.kBrushless);
+  CANSparkMax l3 = new CANSparkMax(RobotMap.L3CANID, MotorType.kBrushless);
   CANSparkMax r1 = new CANSparkMax(RobotMap.R1CANID, MotorType.kBrushless);
   CANSparkMax r2 = new CANSparkMax(RobotMap.R2CANID, MotorType.kBrushless);
-  //CANSparkMax r3 = new CANSparkMax(RobotMap.R3CANID, MotorType.kBrushless);
+  CANSparkMax r3 = new CANSparkMax(RobotMap.R3CANID, MotorType.kBrushless);
 
   //leds
   Spark led = new Spark(RobotMap.BLINKINPORT);
@@ -49,8 +49,8 @@ public class Robot extends TimedRobot {
   TalonSRX shootIntake = new TalonSRX(RobotMap.SHOOTINTAKEID);
 
   //drive
-  MotorControllerGroup l = new MotorControllerGroup(l1, l2);
-  MotorControllerGroup r = new MotorControllerGroup(r1, r2);
+  MotorControllerGroup l = new MotorControllerGroup(l1, l2, l3);
+  MotorControllerGroup r = new MotorControllerGroup(r1, r2, r3);
   DifferentialDrive drive = new DifferentialDrive(l,r);
 
   //controllers
@@ -99,7 +99,6 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     gyro.calibrate();
     gyro.reset();
-    
   }
 
   @Override
@@ -119,14 +118,19 @@ public class Robot extends TimedRobot {
 
     if(timer.get()<RobotMap.AUTOSPINUPSHOOTINIT){
       shooter.set(RobotMap.AUTOSHOOTSPEED);
-
       //deployRetract.set(0.2);
     }
+    if(timer.get()< RobotMap.AUTOTUNEDRIVEBACK && timer.get()<RobotMap.AUTOSHOOTFIRST){
+      drive.arcadeDrive(0, .2);
+    }
+    if(timer.get()>RobotMap.AUTOTUNEDRIVEBACK && timer.get()<RobotMap.AUTOSHOOTFIRST){
+      drive.arcadeDrive(0, 0);
+    }
+    
     if(timer.get()<RobotMap.AUTOSHOOTFIRST&& timer.get()> RobotMap.AUTOSPINUPSHOOTINIT){
       //shooter.set(RobotMap.AUTOSHOOTSPEED);
       shootIntake.set(ControlMode.PercentOutput, RobotMap.AUTOSHOOTINTAKESPEED);
       indexer.set(ControlMode.PercentOutput, RobotMap.AUTOINDEXERSPEED);
-
 
       //deployRetract.set(0.0);
     }
@@ -143,6 +147,7 @@ public class Robot extends TimedRobot {
     
     if(timer.get()>RobotMap.AUTODRIVEBACK && timer.get()<RobotMap.AUTOSTOPDRIVE){
       drive.arcadeDrive(0,0);
+      
     }
     /*if(timer.get()>RobotMap.AUTOSTOPDRIVE && timer.get()< 12.9 + delay){
       intake.set(0);
@@ -218,13 +223,12 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     intake();
-    //operatorIntake();
     speedButtons();
     deployRetractIntake();
     retractDeployClimber();
     shootBothControllers();
     driverTransition();
-    //timeShoot();
+    leds();
   }
 
   @Override
@@ -237,21 +241,7 @@ public class Robot extends TimedRobot {
   public void testInit() {}
 
   @Override
-  public void testPeriodic() {
-    
-  }
-
-  public void operatorIntake(){
-    if(operator.getRawAxis(RobotMap.OPINTAKEFORWARDAXIS)>0){
-      intake.set(0.7);
-    }
-    if(operator.getRawAxis(RobotMap.OPINTAKEBACKAXIS)>0){
-      intake.set(-0.7);
-    }
-    if(operator.getRawAxis(RobotMap.OPINTAKEFORWARDAXIS)==0 && operator.getRawAxis(RobotMap.OPINTAKEBACKAXIS)==0){
-      intake.set(0);
-    }
-  }
+  public void testPeriodic() {}
 
   public void intake(){
     if(driver.getRawButton(RobotMap.INTAKEBUTTONFOR)){
@@ -268,7 +258,6 @@ public class Robot extends TimedRobot {
   
     
   }
-
   public void reverseAll(){
     if(driver.getPOV() == 180){
       intake.set(-.7);
@@ -318,25 +307,7 @@ public class Robot extends TimedRobot {
       shooter.set(0.0);
     }
   }
-  public void toggleShoot(){
-    updateToggle();
-
-    if(toggleOn){
-      shooter.set(0.7);
-    }
-    else{shooter.set(0);}
-  }
-  public void updateToggle(){
-    if(operator.getRawButton(3)){
-      if(!toggleButtonPressed){
-        toggleOn = !toggleOn;
-        toggleButtonPressed = true;
-      }
-      else{toggleButtonPressed = false;}
-    }
-  }
-
-public void driverTransition(){
+  public void driverTransition(){
   if(driver.getRawButton(RobotMap.DRIVERSHOOTINTAKE)){
     shootIntake.set(ControlMode.PercentOutput, .4);
 
@@ -346,12 +317,12 @@ public void driverTransition(){
     shootIntake.set(ControlMode.PercentOutput, 0.0);
   }
 }
-public void timeShoot(){
+  public void timeShoot(){
     if(driver.getRawButton(RobotMap.SHOOTCOMBINATIONBUTTON)){
       timer.start();
       timer.reset();
       
-      if(timer.get()>.5){
+      if(timer.get()<.5){
         //spin up
           shooter.set(RobotMap.AUTOSHOOTSPEED);
       }
@@ -372,7 +343,6 @@ public void timeShoot(){
       indexer.set(ControlMode.PercentOutput, 0);
     }
   }
-
   /**
    * @author Lauren
    * handles shooting for both controllers
@@ -385,43 +355,38 @@ public void timeShoot(){
       shootIntake.set(ControlMode.PercentOutput, -1);    
       indexer.set(ControlMode.PercentOutput, 1);
       shooter.set(0.7);
-      comboButtonPressed = true;
     }//else
     if(!driver.getRawButton(RobotMap.SHOOTCOMBINATIONBUTTON)){
-      
-
-      comboButtonPressed = false;
       shoot();
       shootIntake();
       indexer();
     }
   }
-
   public void speedButtons(){
     //slow button for xbox controller
-   if(driver.getRawButton(3)){
-    drive.arcadeDrive(-driver.getRawAxis(0) * 0.2, -driver.getRawAxis(3) * 0.2);
+    if(driver.getRawButton(3)){
+    drive.arcadeDrive(driver.getRawAxis(0) * 0.2, driver.getRawAxis(3) * 0.2);
     if(driver.getRawAxis(2) > 0){
-    drive.arcadeDrive(-driver.getRawAxis(0) * 0.2, driver.getRawAxis(2) * 0.2);
+    drive.arcadeDrive(driver.getRawAxis(0) * 0.2, -driver.getRawAxis(2) * 0.2);
     }
-  }
+    }
 
- //fast button for xbox controller
-  else if(driver.getRawButton(1)){
-    drive.arcadeDrive(-driver.getRawAxis(0), -driver.getRawAxis(3));
+  //fast button for xbox controller
+    else if(driver.getRawButton(1)){
+    drive.arcadeDrive(driver.getRawAxis(0), driver.getRawAxis(3));
     if(driver.getRawAxis(2)>0){
-      drive.arcadeDrive(-driver.getRawAxis(0), driver.getRawAxis(2));
+      drive.arcadeDrive(driver.getRawAxis(0), -driver.getRawAxis(2));
     }
-  }
+    }
 
- //default condition for neither buttons active
-  else if(!driver.getRawButton(3) || !driver.getRawButton(1)){
-    drive.arcadeDrive(-driver.getRawAxis(0) * 0.8, -driver.getRawAxis(3) * 0.8);
+  //default condition for neither buttons active
+    else if(!driver.getRawButton(3) || !driver.getRawButton(1)){
+    drive.arcadeDrive(driver.getRawAxis(0) * 0.8, driver.getRawAxis(3) * 0.8);
     if(driver.getRawAxis(2) > 0){
-      drive.arcadeDrive(-driver.getRawAxis(0) * 0.8, driver.getRawAxis(2) * 0.8);
+      drive.arcadeDrive(driver.getRawAxis(0) * 0.8, -driver.getRawAxis(2) * 0.8);
     }
-  }
-} 
+    }
+  } 
   public void retractDeployClimber(){
     //if(timer.get()>=120){
       if(operator.getPOV() == 0){
@@ -439,9 +404,6 @@ public void timeShoot(){
       }
 
     }
-  //}
-  
-  
   public void turnTo(double targetAngle, double targetSpeed){
     //angle = 0-2^16
     PID.setSetpoint(targetAngle);
@@ -476,10 +438,7 @@ public void timeShoot(){
       led.set(-0.49);
     }
   }
-
-  
-
-  /*public void UpdateLimeLight(){
+  public void UpdateLimeLight(){
     final double STEER= 0.1;      //how hard to turn
     final double DRIVE= 0.25;     //how hard to drive forward
     final double TARGET_AREA = 10;//percentage of screen that the target covers
@@ -502,5 +461,5 @@ public void timeShoot(){
     llSteer = dx*STEER;
     llDrive = (TARGET_AREA- da)*DRIVE;
     llDrive = llDrive>MAX_DRIVE?MAX_DRIVE:llDrive;
-  }*/
+  }
 }

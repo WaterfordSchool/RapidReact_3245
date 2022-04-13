@@ -6,14 +6,17 @@ public class RobotMap {
     //can drive motors; CAN IDS CORRECT
     public static final int R1CANID = 3;
     public static final int R2CANID = 2;
+    public static final int R3CANID = 54;
     public static final int L1CANID = 1;
     public static final int L2CANID = 4;
+    public static final int L3CANID = 55;
 
     //pwm ports
     public static final int BLINKINPORT = 9;
 
     //auto durations
-    public static final double AUTOSPINUPSHOOTINIT = 2.5;
+    public static final double AUTOSPINUPSHOOTINIT = 1.5;
+    public static final double AUTOTUNEDRIVEBACK = AUTOSPINUPSHOOTINIT + 2;
     public static final double AUTOSHOOTFIRST = AUTOSPINUPSHOOTINIT + 2.5;
     public static final double AUTODRIVEBACK = AUTOSHOOTFIRST + 4.9;
 
@@ -49,7 +52,12 @@ public class RobotMap {
     public static final double AUTODRIVESPEED = .15;
     public static final double AUTOINDEXERSPEED = .9;
     public static final double AUTODRINTAKESPEED = .5;
-    public static final double AUTOSHOOTINTAKESPEED = -.4;
+    public static final double AUTOSHOOTINTAKESPEED = 0.4;
+
+
+
+
+
     //^ changed from -0.5, change back if too strong
     //not change in teleop
 
@@ -58,7 +66,7 @@ public class RobotMap {
 
     //operator controls
     
-    public static final int INDEXERBUTTON = 2;
+    public static final int INDEXERBUTTON = 3;
     public static final int DEPLOYRETRACTINTAKEAXIS = 1;
     public static final int SHOOTINTAKEFORWARDBUTTON = 5;
     public static final int SHOOTINTAKEBACKBUTTON = 6;
